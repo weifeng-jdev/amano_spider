@@ -58,8 +58,8 @@ class DmzjSpider(scrapy.Spider):
         if info_eles[2].extract():
             item["category"] = info_eles[2].extract()[3:]
         if info_eles[3].extract():
-            item["tags"] = info_eles[3].extract()[0]
+            item["tags"] = info_eles[3].extract()[3:]
         update_time_ele = response.xpath('//span[@class="zj_list_head_dat"]/text()').extract()[0][7:-2]
         item['update_time'] = datetime.datetime.strptime(update_time_ele, "%Y-%m-%d")
-        item['popularity'] = response.xpath('//span[@id="hot_hits"]/text()').extract()[0]
+        # item['popularity'] = response.xpath('//span[@id="hot_hits"]/text()').extract()[0]
         yield item
