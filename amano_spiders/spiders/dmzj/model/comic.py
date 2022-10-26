@@ -15,7 +15,7 @@ class ComicItem(SqlItem, metaclass=SqlAlchemyItemMeta):
                      Column('author', String(20)),
                      Column('category', String(50)),
                      Column('state', Integer),
-                     Column('popularity', Integer),
+                     Column('score', Integer),
                      Column("tags", Text),
                      Column('describe', Text),
                      Column("update_time", Date),

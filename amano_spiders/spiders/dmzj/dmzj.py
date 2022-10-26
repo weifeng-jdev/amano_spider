@@ -1,11 +1,12 @@
 import datetime
 import os
-
+import re
 
 import scrapy
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from sqlalchemy import Date
+from execjs import execjs
 
 from amano_spiders.spiders.dmzj.model.comic import ComicItem
 
@@ -17,6 +18,7 @@ class DmzjSpider(scrapy.Spider):
         self.base_url = 'https://www.dmzj.com'
         self.allowed_domains = ['dmzj.com']
         self.start_urls = ['https://www.dmzj.com/category/1-0-0-0-0-0-1.html']
+        self.rex = re.compile('//v3api.dmzj.com/comic/hot_sub_num/\d+.json')
         # self.chrome_options = Options()
         # self.chrome_options.add_argument('--disable-gpu')  # 谷歌文档提到需要加上这个属性来规避bug
         # self.chrome_options.add_argument('--headless')  # 浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
@@ -47,6 +49,8 @@ class DmzjSpider(scrapy.Spider):
         yield scrapy.Request(url=next_page_url)
 
     def detail_page(self, response):
+        # https://i.dmzj.com/ajax/getScoreInfo?callback=success_jsonpCallback_201509221731&comic_id=20844&_=1666798979647
+        self.rex.findall(response.text)[0]
         item = response.meta['item']
         info_eles = response.xpath('//ul[@class="comic_deCon_liO"]/li/text()')
         item["describe"] = response.xpath('//p[@class="comic_deCon_d"]/text()').extract()[0]
@@ -61,5 +65,5 @@ class DmzjSpider(scrapy.Spider):
             item["tags"] = info_eles[3].extract()[3:]
         update_time_ele = response.xpath('//span[@class="zj_list_head_dat"]/text()').extract()[0][7:-2]
         item['update_time'] = datetime.datetime.strptime(update_time_ele, "%Y-%m-%d")
-        # item['popularity'] = response.xpath('//span[@id="hot_hits"]/text()').extract()[0]
+        item['score'] = response.xpath('//em[@id="scorData"]/text()').extract()[0]
         yield item
