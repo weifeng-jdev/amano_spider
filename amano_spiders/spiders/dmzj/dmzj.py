@@ -5,7 +5,7 @@ import re
 import requests
 import scrapy
 
-from amano_spiders.spiders.dmzj.model.comic import ComicItem
+from amano_spiders.spiders.model.comic import ComicItem
 
 
 class DmzjSpider(scrapy.Spider):
