@@ -63,7 +63,8 @@ COOKIES_ENABLED = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'amano_spiders.pipelines.Dmzj2Pipeline': 100,
+   'amano_spiders.pipelines.ComicSpiderPipeline': 100,
+   'amano_spiders.pipelines.ChapterPipeline': 101,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -89,6 +90,10 @@ ITEM_PIPELINES = {
 
 #log level
 LOG_LEVEL = 'INFO'
+
+# scrapy_sqlitem batch insert
+DEFAULT_CHUNKSIZE = 500
+CHUNKSIZE_BY_TABLE = {'comic': 100, 'othertable': 250}
 
 #database config
 DB_USERNAME = ''
