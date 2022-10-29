@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from amano_spiders.spiders.config.dbconfig import get_engine
 from amano_spiders.spiders.model.chapter import ChapterItem, ChapterModel
-from amano_spiders.spiders.model.comic import ComicItem
+from amano_spiders.spiders.model.comic import ComicItem, ComicModel
 from amano_spiders import comic_id_dict
 
 
@@ -24,7 +24,10 @@ class ComicSpiderPipeline:
         if isinstance(item, ComicItem):
             try:
                 # save or update
-                id = item.commit_item(get_engine())
+                comic = ComicModel(item)
+                with Session(bind=get_engine()) as seesion:
+                    seesion.add(comic)
+                    seesion.commit()
                 comic_id = item.comic_id
                 comic_id_dict[comic_id] = id
             except Exception as e:

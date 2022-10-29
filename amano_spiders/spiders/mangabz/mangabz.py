@@ -36,7 +36,7 @@ class MangabzSpider(scrapy.Spider):
     def parse_detail_page(self, response):
         # 格式化漫画详情
         item = self.parse_detail_item(response)
-        # yield item
+        yield item
         # 获取章节数据
         chapter_list = response.xpath('//div[@id="chapterlistload"]/a')
         for page_number_ele in chapter_list:

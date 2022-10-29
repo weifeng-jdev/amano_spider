@@ -25,9 +25,9 @@ class ComicModel(Base):
     update_time = Column(Date)
     source_site = Column(Integer)
 
-    def __init__(self, **items):
+    def __init__(self, items):
         for key in items:
-            if hasattr(items, key):
+            if hasattr(self, key):
                 setattr(self, key, items[key])
 
 
